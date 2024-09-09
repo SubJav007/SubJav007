@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliratok Tára - Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+        }
+
+        .upload-form {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: none; /* Alapértelmezetten rejtett */
+        }
+
+        .upload-form input[type="file"] {
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .subtitles-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .subtitles-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .subtitles-list a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+        .subtitles-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* Bejelentkezési űrlap */
+        .login-form {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .login-form input[type="password"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Feliratok Tára</h1>
+        <p class="subtitle">Töltsd fel és oszd meg felirataidat!</p>
+
+        <!-- Bejelentkezési űrlap az adminnak -->
+        <div class="login-form" id="loginForm">
+            <p>Csak admin tölthet fel feliratokat. Add meg a jelszót:</p>
+            <input type="password" id="passwordInput" placeholder="Admin jelszó">
+            <br>
+            <button onclick="login()">Bejelentkezés</button>
+        </div>
+
+        <!-- Feltöltési űrlap (alapértelmezetten rejtett) -->
+        <div class="upload-form" id="uploadForm">
+            <form id="fileUploadForm">
+                <input type="file" id="fileInput" accept=".srt,.vtt">
+                <br>
+                <button type="submit">Feltöltés</button>
+            </form>
+        </div>
+
+        <ul class="subtitles-list" id="subtitlesList">
+            <!-- Itt jelennek meg a feltöltött feliratok -->
+        </ul>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const subtitlesList = document.getElementById('subtitlesList');
+        const loginForm = document.getElementById('loginForm');
+
+        // Egyszerű jelszó ellenőrzés (csak példa)
+        const adminPassword = "admin123"; // Admin jelszó (ezt megváltoztathatod)
+
+        function login() {
+            const passwordInput = document.getElementById('passwordInput').value;
+            if (passwordInput === adminPassword) {
+                // Ha helyes a jelszó, elrejti a bejelentkezési űrlapot és megjeleníti a feltöltési űrlapot
+                loginForm.style.display = 'none';
+                uploadForm.style.display = 'block';
+            } else {
+                alert("Helytelen jelszó!");
+            }
+        }
+
+        // Feltöltési logika
+        fileUploadForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const file = fileInput.files[0];
+            if (file) {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.textContent = file.name;
+                link.href = URL.createObjectURL(file);
+                link.download = file.name;
+                listItem.appendChild(link);
+                subtitlesList.appendChild(listItem);
+
+                // Töröljük a fájlt az input mezőből
+                fileInput.value = '';
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
